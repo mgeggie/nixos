@@ -126,6 +126,7 @@
     openssh
     plex
     screen
+    tailscale
     vim
     wget
   ];
@@ -151,6 +152,11 @@
 
   # Plex media server
   services.plex = {
+    enable = true;
+  };
+
+  # Tailscale VPN
+  services.tailscale = {
     enable = true;
   };
 
