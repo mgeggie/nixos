@@ -45,6 +45,15 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  # Disable power management
+  powerManagement.enable = false;
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+'';
+
   # Enable zfs scrubbing
   services.zfs.autoScrub.enable = true;
 
@@ -65,7 +74,6 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -112,6 +120,11 @@
     extraGroups = [ "cdrom" "video" "plex" ];
   };
 
+  users.users.immich = {
+    isSystemUser = true;
+    description = "Immich Photo Storage";
+    group = "immich";
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -123,6 +136,7 @@
     docker
     git
     lsscsi
+    immich
     openssh
     plex
     screen
@@ -145,6 +159,15 @@
     enable = true;
     # Enable the Avahi mDNS NSSwitch plugin to resolve .local domains.
     nssmdns = true;
+  };
+
+  # Immich
+  services.immich = {
+    enable = true;
+    host = "0.0.0.0";
+    port = 2283;
+    openFirewall = true;
+    machine-learning.enable = false;
   };
 
   # Enable the OpenSSH daemon.
@@ -173,7 +196,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
   
   # Enable the Docker daemon.
   virtualisation.docker.enable = true;
